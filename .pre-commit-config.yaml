@@ -1,0 +1,34 @@
+repos:
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: double-quote-string-fixer
+      - id: check-case-conflict
+      - id: mixed-line-ending
+      - id: check-ast
+      - id: detect-aws-credentials
+      - id: detect-private-key
+      - id: debug-statements
+
+  - repo: local
+    hooks:
+      - id: flake8
+        name: Code formatting
+        entry: flake8
+        args: [--exclude, ".*"]
+        files: src
+        language: system
+        stages: [manual, commit, push]
+
+      - id: isort
+        name: Imports sorting and formatting
+        entry: isort
+        files: src
+        language: system
+        stages: [manual, commit, push]

@@ -1,4 +1,5 @@
 /scrapy
+/selenium
 **/__pycache__/
 **/.ipynb_checkpoints/
 **/.serverless/

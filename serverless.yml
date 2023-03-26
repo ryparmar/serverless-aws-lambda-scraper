@@ -1,0 +1,57 @@
+service: vinted-scraper
+# app and org for use with dashboard.serverless.com
+app: vinted-scraper
+org: ryparmar
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.9
+  stage: dev
+  region: eu-central-1
+  endpointType: regional
+  profile: personal-acc  # only if other than default
+  memorySize: 3008
+  timeout: 900
+  tags:
+    application: vinted-scraper
+    environment: ${sls:stage}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:GetObject
+          Resource: "arn:aws:s3:::fashion-aggregator/*"
+  ecr:
+    # Images built locally and uploaded to ECR
+    images:
+      selenium-scraper:
+        path: ./
+        # platform: linux/amd64
+
+package:
+  patterns:
+    - '!./**'  # exclude all from current dir
+    - src/*.py  # include only python files
+
+functions:
+  index:
+    image:
+      name: selenium-scraper
+      command:
+        - src/handlers.handler_index
+
+  status:
+    image:
+      name: selenium-scraper
+      command:
+        - src/handlers.handler_status
+
+  scrape_item_urls:
+    image:
+      name: selenium-scraper
+      command:
+        - src/handlers.handler_scrape_item_urls
